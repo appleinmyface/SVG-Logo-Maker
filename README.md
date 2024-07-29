@@ -45,7 +45,7 @@ You will see a confirmation message in the command line:
 ## Example
 If you input "SVG" for the text, "white" for the text color, "Circle" for the shape, and "green" for the shape color, the generated SVG will look like this:
 
-![alt text](image.png)
+![alt text](./img/image.png)
 
 ## File Structure
 .
