@@ -1,22 +1,22 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
-const { Circle, Triangle, Square } = require('./lib/shapes');
-const Text = require('./lib/text');
-const { isValidColor } = require('./lib/colors');
+const { isValidColor } = require('./examples/lib/colors');
+const { Circle, Triangle, Square } = require('./examples/lib/shapes');
+const { SVGText } = require('./examples/lib/text');
 
-async function generateLogo() {
-    const answers = await inquirer.prompt([
+const promptUser = () => {
+    return inquirer.prompt([
         {
             type: 'input',
             name: 'text',
-            message: 'Enter up to three characters for the logo text:',
-            validate: (input) => input.length <= 3 || 'Text must be 3 characters or less.'
+            message: 'Enter up to three characters for the logo:',
+            validate: input => input.length <= 3 || 'Text must be three characters or less.'
         },
         {
             type: 'input',
             name: 'textColor',
-            message: 'Enter the text color (keyword or hexadecimal):',
-            validate: (input) => isValidColor(input) || 'Please enter a valid color.'
+            message: 'Enter the text color (keyword or hex):',
+            validate: isValidColor
         },
         {
             type: 'list',
@@ -27,38 +27,50 @@ async function generateLogo() {
         {
             type: 'input',
             name: 'shapeColor',
-            message: 'Enter the shape color (keyword or hexadecimal):',
-            validate: (input) => isValidColor(input) || 'Please enter a valid color.'
+            message: 'Enter the shape color (keyword or hex):',
+            validate: isValidColor
         }
     ]);
+};
 
-    let shape;
-    switch (answers.shape) {
+const generateSVG = ({ text, textColor, shape, shapeColor }) => {
+    let shapeElement;
+
+    switch (shape) {
         case 'Circle':
-            shape = new Circle();
+            shapeElement = new Circle();
             break;
         case 'Triangle':
-            shape = new Triangle();
+            shapeElement = new Triangle();
             break;
         case 'Square':
-            shape = new Square();
+            shapeElement = new Square();
             break;
     }
-    shape.setColor(answers.shapeColor);
 
-    const text = new Text();
-    text.setText(answers.text);
-    text.setColor(answers.textColor);
+    shapeElement.setColor(shapeColor);
 
+    const svgText = new SVGText(text, textColor);
     const svgContent = `
-<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
-    ${shape.render()}
-    ${text.render()}
-</svg>`;
+        <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+            ${shapeElement.render()}
+            ${svgText.render()}
+        </svg>
+    `;
 
-    fs.writeFileSync('logo.svg', svgContent.trim());
+    return svgContent.trim();
+};
 
-    console.log('Generated logo.svg');
-}
+const run = async () => {
+    try {
+        const answers = await promptUser();
+        const svgContent = generateSVG(answers);
 
-generateLogo();
+        fs.writeFileSync('examples/logos/logo.svg', svgContent);
+        console.log('Generated examples/logo.svg');
+    } catch (error) {
+        console.error('Error generating the SVG logo:', error);
+    }
+};
+
+run();

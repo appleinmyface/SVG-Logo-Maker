@@ -1,14 +1,6 @@
-class Text {
-    constructor() {
-        this.text = '';
-        this.color = '';
-    }
-
-    setText(text) {
+class SVGText {
+    constructor(text, color) {
         this.text = text;
-    }
-
-    setColor(color) {
         this.color = color;
     }
 
@@ -17,4 +9,4 @@ class Text {
     }
 }
 
-module.exports = Text;
+module.exports = { SVGText };
