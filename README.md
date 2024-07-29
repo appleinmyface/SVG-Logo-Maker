@@ -18,7 +18,7 @@ SVG Logo Maker is a command-line application that allows users to create simple,
 ## Installation
 
 ### Clone the repository:
-git clone https://github.com/yourusername/svg-logo-maker.git
+git clone <SSH key>
 
 ### Navigate into the project directory:
 cd svg-logo-maker
