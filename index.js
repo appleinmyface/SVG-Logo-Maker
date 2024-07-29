@@ -50,7 +50,7 @@ const generateSVG = ({ text, textColor, shape, shapeColor }) => {
 
     shapeElement.setColor(shapeColor);
 
-    const svgText = new SVGText(text, textColor);
+    const svgText = new SVGText(text, textColor, shape);  // Pass shape to SVGText
     const svgContent = `
         <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
             ${shapeElement.render()}
@@ -67,7 +67,7 @@ const run = async () => {
         const svgContent = generateSVG(answers);
 
         fs.writeFileSync('examples/logos/logo.svg', svgContent);
-        console.log('Generated examples/logo.svg');
+        console.log('Generated examples/logos/logo.svg');
     } catch (error) {
         console.error('Error generating the SVG logo:', error);
     }
